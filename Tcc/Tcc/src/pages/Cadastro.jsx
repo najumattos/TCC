@@ -1,18 +1,18 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "./auth.css"
 
 function Cadastro() {
+  const navigate = useNavigate()
+
   const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
   const [tipo, setTipo] = useState("")
 
-  // Paciente
   const [idade, setIdade] = useState("")
   const [telefone, setTelefone] = useState("")
 
-  // Psicólogo
   const [crp, setCrp] = useState("")
   const [especialidade, setEspecialidade] = useState("")
 
@@ -28,8 +28,15 @@ function Cadastro() {
       ...(tipo === "psicologo" && { crp, especialidade })
     }
 
-    console.log("Dados enviados:", dados)
-    alert("Cadastro realizado (mock)")
+    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || []
+
+    usuarios.push(dados)
+
+    localStorage.setItem("usuarios", JSON.stringify(usuarios))
+
+    alert("Cadastro realizado com sucesso!")
+
+    navigate("/login")
   }
 
   return (
@@ -72,8 +79,6 @@ function Cadastro() {
             <option value="paciente">Paciente</option>
             <option value="psicologo">Psicólogo</option>
           </select>
-
-          {/* 👇 CAMPOS CONDICIONAIS */}
 
           {tipo === "paciente" && (
             <>
